@@ -293,7 +293,7 @@ bool UrlCompressor::StoreDictToFileStream(std::ofstream& file )
 		mem_block = (char *) &fp;
 		file.write(mem_block,sizeof(FlatPattern));
 		//write cstring+NULL
-		file.write(ptrn->_str.c_str(),ptrn->_str.length()+1 /* for last NULL */);
+		file.write(ptrn->_str,strlen(ptrn->_str)+1 /* for last NULL */);
 		//write huffman code buffer
 
 		uint16_t huff_buf_size = conv_bits_to_uin32_size(fp.huffman_length );

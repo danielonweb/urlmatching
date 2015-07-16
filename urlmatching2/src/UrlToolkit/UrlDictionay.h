@@ -180,7 +180,11 @@ public:
 	UrlBuilder(Symbol2pPatternVec symbol2pattern_db);
 	virtual ~UrlBuilder() {}
 
-	virtual void reset() {_url.empty(); }
+	virtual void reset() {
+		_url.clear();
+		_url.reserve(1000);
+		_symbol_deque.resize(500);
+	}
 	virtual void append (symbolT symbol);
 	virtual std::string get_url() {return _url; }
 	virtual void debug_print();

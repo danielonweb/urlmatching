@@ -25,7 +25,7 @@
 #define SIZEOFPOINTER sizeof(void *)
 #define S_NULL 0
 
-typedef std::string** StringListType;
+typedef std::string* StringListType;
 typedef uint32_t symbolT;
 
 #define MAX_CODED_HUFFMAN_SIZE 2
@@ -53,23 +53,26 @@ uint16_t conv_bits_to_bytes(uint32_t bits) {
 /**
  * Defines a single pattern: <Pattern,Symbol,Frequency,Huffman length>
  */
+
+#define MAX_PATTERN_LEN (12 + 40)
 class Pattern {
 public:
 	Pattern(uint32_t symbol, uint32_t frequency, std::string str);
 	virtual ~Pattern() ;
 
-	uint32_t inline getStringLength() { return (_str.length()*sizeof(char)); }
+	uint32_t inline getStringLength() { return (strlen(_str)*sizeof(char)); }
 	uint32_t inline getHuffmanLength() { return (_coded.length);	}
 
 	inline 	size_t size() {
 		size_t size = sizeof(Pattern)
-				+ _str.size();
+				+ MAX_PATTERN_LEN;
 		return size;
 	}
 
 	//members				(sizes in 64bit OS)
 	symbolT _symbol;		//4 bytes
-	std::string _str;		//8 bytes
+//	std::string _str;		//8 bytes
+	char _str[MAX_PATTERN_LEN];		//52 - 12 bytes are free due to alignment + 40 extra chars. std::string actual allocated memory is 48 bytes
 	CodedHuffman _coded;	//12bytes
 	uint16_t _frequency; 	//2 bytes
 

@@ -1,10 +1,16 @@
 #include "UrlDictionay.h"
 #include "../logger.h"
 #include "../common.h"
+#include <string.h>
 
-Pattern::Pattern(uint32_t symbol, uint32_t frequency, std::string str) : _str(str) {
+Pattern::Pattern(uint32_t symbol, uint32_t frequency, std::string str)  {
 	_symbol=symbol;
 	_frequency=frequency;
+	strncpy(_str, str.c_str(), MAX_PATTERN_LEN-1);
+	if (str.length()+1 > MAX_PATTERN_LEN) {
+		std::cout << "Pattern "<<str<< " was truncated to "<< _str<<STDENDL;
+	}
+	_str[MAX_PATTERN_LEN-1]='\0';
 	_coded.buf[0] = 0;
 	_coded.length = 0;
 }
