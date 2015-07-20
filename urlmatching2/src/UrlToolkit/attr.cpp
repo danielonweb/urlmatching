@@ -3,6 +3,9 @@
 #include "../common.h"
 #include <string.h>
 
+extern long double matchingtime;
+extern long double convettime;
+
 Pattern::Pattern(uint32_t symbol, freqT frequency, std::string str) : _str(str) {
 	_symbol=symbol;
 	_frequency=frequency;
@@ -50,6 +53,8 @@ void UrlCompressorStats::print(std::ostream& out) const {
 		out<< "params: kgram size = "<< (params.kgrams_size)<< " r = " <<DVAL(params.r)<<STDENDL;
 		out<< "params: n1 = "<< (params.n1)<< " n2 = " <<(params.n2)<<STDENDL;
 	}
+	out<< " Total Matching time = "<<matchingtime<<" -> " <<(matchingtime/(matchingtime+convettime))<<STDENDL;
+	out<< " Total Converting time = "<<convettime<<" -> " <<(convettime/(matchingtime+convettime))<<STDENDL;
 	out<<"Size of pointer = "<<SIZEOFPOINTER<<" Bytes"<<STDENDL;
 	out<<"Size of Pattern = "<<sizeof(Pattern)<<" Bytes"<<STDENDL;
 	out<<"Size of CodedHuffman = "<<sizeof(CodedHuffman)<<" Bytes"<<STDENDL;

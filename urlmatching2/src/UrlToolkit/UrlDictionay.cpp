@@ -26,6 +26,15 @@
 
 typedef unsigned char uchar;
 
+//todo: remove all timing stuff
+#define GETTIMING double(end - begin) / (CLOCKS_PER_SEC)
+#define START_TIMING 	do {begin = std::clock();} while(0)
+#define STOP_TIMING 	do {end = std::clock();} while(0)
+#define PREPARE_TIMING clock_t begin,end
+
+long double matchingtime = 0;
+long double convettime = 0;
+
 //globals
 HeavyHittersParams_t default_hh_params {1000, 1000, 0.9, 8};
 
@@ -492,11 +501,15 @@ UrlCompressorStatus UrlCompressor::encode_2(std::string url, uint32_t* out_encod
 	if (isLoaded() == false) {
 		return STATUS_ERR_NOT_LOADED;
 	}
+	PREPARE_TIMING;
+	START_TIMING;
 	//find patterns cover over url
 	symbolT result[MAX_URL_LENGTH];
 	algo.find_patterns(url,result);
+	STOP_TIMING;
+	matchingtime +=GETTIMING;
 
-
+	START_TIMING;
 	//Huffman encode the symbols
 	uint32_t& bit_counter = out_encoded_buf[0];
 	bit_counter=0;
@@ -550,6 +563,8 @@ UrlCompressorStatus UrlCompressor::encode_2(std::string url, uint32_t* out_encod
 	}
 
 	buf_size = i_out + 1; //convert from last used space to size
+	STOP_TIMING;
+	convettime +=GETTIMING;
 	return STATUS_OK;
 }
 
