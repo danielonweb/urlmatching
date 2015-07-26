@@ -21,6 +21,8 @@
 #include "UrlToolkit/UrlDictionay.h"
 #include "HeavyHitters/dhh_lines.h"
 #include "UrlToolkit/PackedCode.h"
+#include "libcuckoo/cuckoohash_map.hh"
+
 #include "logger.h"
 #include "common.h"
 
@@ -69,7 +71,21 @@ struct EncodedHasher {
 	}
 };
 
+using StringCharTable = cuckoohash_map<
+		std::string,
+		char,
+		std::hash<std::string>,
+		std::equal_to<std::string>,
+		std::allocator<std::pair<const std::string, char>>,
+		4>;
 
+using EncodedCharTable = cuckoohash_map<
+		Encoded,
+		int,
+		std::hash<Encoded>,
+		std::equal_to<Encoded>,
+		std::allocator<std::pair<const Encoded, char>>,
+		4>;
 
 
 struct RunTimeStatsHashtable {
